@@ -69,6 +69,10 @@ func (e *Permutation) Decode() string {
 	for _, val := range textRunes {
 		result = append(result, val)
 
+		if len(e.Key) == 0 {
+			return "Нет ключа для этого слова"
+		}
+
 		if len(result) == e.Key[j] {
 			result = append(result, ' ')
 			if j != len(e.Key)-1 {
