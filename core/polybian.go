@@ -5,7 +5,7 @@ import (
 	"math/rand"
 )
 
-type Encryption struct {
+type PolybianSquare struct {
 	Key                     [][]rune
 	EncodingText            string
 	MapPositionSymbol       map[rune][]int
@@ -13,15 +13,15 @@ type Encryption struct {
 	Text                    string
 }
 
-func New(text string) (e Encryption) {
-	return Encryption{
+func NewPolybian(text string) (e PolybianSquare) {
+	return PolybianSquare{
 		MapPositionSymbol:       make(map[rune][]int),
 		MapPositionEncodeSymbol: make(map[rune][]int),
 		Text:                    text,
 	}
 }
 
-func (e *Encryption) GenerateKey() {
+func (e *PolybianSquare) GenerateKey() {
 	helperMap := make(map[rune]int)
 	textRunes := []rune(e.Text)
 	var alphabetRunes []rune
@@ -73,7 +73,7 @@ func (e *Encryption) GenerateKey() {
 	}
 }
 
-func (e *Encryption) Encoding() {
+func (e *PolybianSquare) Encoding() {
 	textRunes := []rune(e.Text)
 	result := make([]rune, len(textRunes))
 	position := make([]int, 2)
@@ -91,7 +91,7 @@ func (e *Encryption) Encoding() {
 	e.EncodingText = string(result)
 }
 
-func (e *Encryption) Decoding() string {
+func (e *PolybianSquare) Decoding() string {
 	textRunes := []rune(e.EncodingText)
 	result := make([]rune, len(textRunes))
 	position := make([]int, 2)

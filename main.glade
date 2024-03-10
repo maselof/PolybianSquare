@@ -2,11 +2,19 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">Введите текст</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer2">
-    <property name="text" translatable="yes">Полученный текст</property>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name EncodeType -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">PolybianSquare</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Encryption</col>
+      </row>
+    </data>
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can-focus">False</property>
@@ -85,7 +93,22 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkComboBox" id="encryption_type">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="model">liststore1</property>
+            <property name="active-id">PolybianSquare</property>
+            <child>
+              <object class="GtkCellRendererText" id="EncodeType"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
         <child>
           <placeholder/>
@@ -104,5 +127,11 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">Введите текст</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer2">
+    <property name="text" translatable="yes">Полученный текст</property>
   </object>
 </interface>

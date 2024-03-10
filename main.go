@@ -6,6 +6,11 @@ import (
 	"log"
 )
 
+var TypeEncryption = map[int]string{
+	0: "PolybianSquare",
+	1: "Permutation",
+}
+
 func main() {
 	gtk.Init(nil)
 
@@ -41,29 +46,71 @@ func main() {
 	obj, _ = b.GetObject("decode_btn")
 	decodeBtn := obj.(*gtk.Button)
 
-	var encryption core.Encryption
+	obj, _ = b.GetObject("encryption_type")
+	encType, _ := obj.(*gtk.ComboBox)
+
+	IndTypeEncryption := -1
+
+	encType.Connect("changed", func() {
+		IndTypeEncryption = encType.GetActive()
+	})
+
+	var square core.PolybianSquare
+	var permutation core.Permutation
 
 	encodeBtn.Connect("clicked", func() {
-		text, err := entryText.GetText()
-		if err != nil {
-			log.Fatal("Ошибка при обработке кодирования", err)
+		switch TypeEncryption[IndTypeEncryption] {
+		case "PolybianSquare":
+			text, err := entryText.GetText()
+			if err != nil {
+				log.Fatal("Ошибка при обработке кодирования", err)
+			}
+
+			enc := core.NewPolybian(text)
+			enc.GenerateKey()
+			enc.Encoding()
+			square = enc
+
+			output, _ := outputText.GetBuffer()
+
+			output.SetText(enc.EncodingText)
+		case "Permutation":
+			text, err := entryText.GetText()
+			if err != nil {
+				log.Fatal("Ошибка при обработке кодирования", err)
+			}
+			enc := core.NewPermutation(text)
+			enc.Encode()
+
+			permutation = enc
+
+			output, _ := outputText.GetBuffer()
+			output.SetText(enc.EncodingText)
+		case "":
+			output, _ := outputText.GetBuffer()
+
+			output.SetText("Выберите тип шифрования")
 		}
-
-		enc := core.New(text)
-		enc.GenerateKey()
-		enc.Encoding()
-		encryption = enc
-
-		output, _ := outputText.GetBuffer()
-
-		output.SetText(enc.EncodingText)
 	})
 
 	decodeBtn.Connect("clicked", func() {
-		text := encryption.Decoding()
-		output, _ := outputText.GetBuffer()
+		switch TypeEncryption[IndTypeEncryption] {
+		case "PolybianSquare":
+			text := square.Decoding()
+			output, _ := outputText.GetBuffer()
 
-		output.SetText(text)
+			output.SetText(text)
+		case "Permutation":
+			decodeText := permutation.Decode()
+
+			output, _ := outputText.GetBuffer()
+
+			output.SetText(decodeText)
+		case "":
+			output, _ := outputText.GetBuffer()
+
+			output.SetText("Выберите тип шифрования")
+		}
 	})
 
 	win.ShowAll()
